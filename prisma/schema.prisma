@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Table `leads` — fallback local (SQLite). En production avec Supabase,
+// voir supabase/migrations/0001_site_settings_leads.sql (tables site_settings + leads).
+model Lead {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  name            String
+  phone           String
+  country         String
+  projectType     String   @default("")
+  budget          String   @default("")
+  purchaseTimeline String  @default("")
+  financing       String   @default("")
+  visitPreference String   @default("")
+  message         String?
+  // true = prospect issu de la modale "Recevoir le dossier" (demande de PDF)
+  requestedDocument Boolean @default(false)
+  // Tracking des sources (UTM)
+  source          String   @default("direct")
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  // Pipeline commercial : new | qualified | contacted | visit | negotiation | won | lost
+  status          String   @default("new")
+}
