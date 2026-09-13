@@ -10,12 +10,17 @@
  *   NEXT_PUBLIC_GA4_ID=G-XXXXXXXXXX
  */
 
+export const DIRECT_WHATSAPP_NUMBER = "221773615944";
+
+export const VISIT_WHATSAPP_MESSAGE =
+  "Bonjour, je souhaite programmer une visite pour Teranga Park Villas.";
+
 export const SITE = {
   name: "Teranga Park Villas",
   tagline: "Villas haut de gamme sur la Petite Côte",
   location: "Nguerigne Peulh, route de Ngaparou — Petite Côte, Sénégal",
   price: "157 200 000 FCFA",
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "221773615944", // +221 77 361 59 44
+  whatsappNumber: DIRECT_WHATSAPP_NUMBER, // +221 77 361 59 44
   phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? "+221 77 361 59 44",
   phoneHref: "tel:" + (process.env.NEXT_PUBLIC_PHONE_HREF ?? "+221773615944"),
   instagramUrl:
@@ -28,27 +33,57 @@ export const SITE = {
 
 /** Messages WhatsApp préremplis (une seule source). */
 export const DEFAULT_WHATSAPP_MESSAGE =
-  "Bonjour, je souhaite avoir plus d'informations sur Teranga Park Villas.";
+  VISIT_WHATSAPP_MESSAGE;
 
 export const DOSSIER_WHATSAPP_MESSAGE =
   "Bonjour, je souhaite recevoir le dossier complet de Teranga Park Villas.";
 
 /**
  * Helper unique pour construire un lien WhatsApp.
- * Le numéro vient de site_setting (Supabase) et est passé en prop depuis page.tsx.
- * Fallback sur SITE.whatsappNumber si absent.
+ * Le numéro de destination des CTA est fixé pour garantir la redirection directe.
  */
 export function buildWhatsAppLink(
-  number?: string | null,
+  _number?: string | null,
   message: string = DEFAULT_WHATSAPP_MESSAGE
 ): string {
-  const clean = (number ?? SITE.whatsappNumber).replace(/[^0-9]/g, "");
-  return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/${DIRECT_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+export function buildDirectWhatsAppLink(
+  message: string = DEFAULT_WHATSAPP_MESSAGE
+): string {
+  return buildWhatsAppLink(DIRECT_WHATSAPP_NUMBER, message);
 }
 
 /** Alias conservé pour compatibilité (utilise le numéro par défaut). */
 export const WHATSAPP_LINK = (message?: string) =>
-  buildWhatsAppLink(SITE.whatsappNumber, message);
+  buildDirectWhatsAppLink(message);
+
+export function openDirectWhatsApp(message: string = DEFAULT_WHATSAPP_MESSAGE) {
+  if (typeof window !== "undefined") {
+    window.location.href = buildDirectWhatsAppLink(message);
+  }
+}
+
+export function submitLeadInBackground(payload: Record<string, unknown>) {
+  if (typeof window === "undefined") return;
+
+  const body = JSON.stringify(payload);
+
+  try {
+    const blob = new Blob([body], { type: "application/json" });
+    if (navigator.sendBeacon?.("/api/leads", blob)) return;
+  } catch {
+    /* l'enregistrement est optionnel : WhatsApp reste prioritaire */
+  }
+
+  void fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+    keepalive: true,
+  }).catch(() => undefined);
+}
 
 export const NAV_LINKS = [
   { label: "Projet", href: "#projet" },

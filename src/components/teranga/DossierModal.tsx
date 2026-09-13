@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CheckCircle2,
   Download,
@@ -26,9 +26,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  buildWhatsAppLink,
+  buildDirectWhatsAppLink,
   DOSSIER_WHATSAPP_MESSAGE,
   OPEN_DOSSIER_MODAL_EVENT,
+  submitLeadInBackground,
 } from "@/lib/config";
 import { getUtmPayload, trackLead } from "@/lib/tracking";
 
@@ -51,35 +52,31 @@ interface DossierModalProps {
   whatsappNumber: string;
 }
 
-type Status = "idle" | "sending" | "success" | "unavailable" | "error";
+type Status = "idle" | "sending" | "success" | "unavailable";
 
 /**
  * Modale "Recevoir le dossier" — parcours ultra simple :
  * Nom complet + WhatsApp + Pays → lead enregistré → téléchargement immédiat du PDF.
  * Ouverte par les boutons "Recevoir le dossier" (événement open-dossier-modal).
  */
-export default function DossierModal({ pdfUrl, whatsappNumber }: DossierModalProps) {
+export default function DossierModal({ pdfUrl }: DossierModalProps) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
   const [fields, setFields] = useState({ fullName: "", phone: "", country: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const whatsappLink = buildWhatsAppLink(whatsappNumber, DOSSIER_WHATSAPP_MESSAGE);
+  const whatsappLink = buildDirectWhatsAppLink(DOSSIER_WHATSAPP_MESSAGE);
 
   // Ouverture depuis n'importe quel bouton "Recevoir le dossier" de la page
   useEffect(() => {
     const handler = () => {
       setStatus("idle");
-      setErrorMsg("");
       setErrors({});
       setOpen(true);
     };
     window.addEventListener(OPEN_DOSSIER_MODAL_EVENT, handler);
     return () => window.removeEventListener(OPEN_DOSSIER_MODAL_EVENT, handler);
   }, []);
-
-  const close = useCallback(() => setOpen(false), []);
 
   function setField(name: "fullName" | "phone" | "country", value: string) {
     setFields((f) => ({ ...f, [name]: value }));
@@ -107,51 +104,28 @@ export default function DossierModal({ pdfUrl, whatsappNumber }: DossierModalPro
       return;
     }
 
-    // Réserve l'onglet au clic utilisateur pour éviter le blocage mobile après l'appel réseau.
-    const pdfWindow = pdfUrl ? window.open("about:blank", "_blank") : null;
-
     setStatus("sending");
-    setErrorMsg("");
 
-    try {
-      // 2-6. Enregistrement du lead avec source + UTM + requested_document
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: fields.fullName.trim(),
-          phone: fields.phone.trim(),
-          country: fields.country,
-          requestedDocument: true,
-          ...getUtmPayload(),
-        }),
-      });
+    const fullName = fields.fullName.trim();
+    const phone = fields.phone.trim();
+    const message = [
+      "Bonjour, je souhaite recevoir le dossier complet de Teranga Park Villas.",
+      `Nom : ${fullName}`,
+      `Téléphone : ${phone}`,
+      `Pays : ${fields.country}`,
+      ...(pdfUrl ? [`Dossier PDF : ${pdfUrl}`] : []),
+    ].join("\n");
 
-      if (!response.ok) throw new Error("Erreur serveur");
-
-      trackLead(undefined, undefined);
-
-      // 7. Téléchargement immédiat du dossier après enregistrement réussi
-      if (pdfUrl) {
-        setStatus("success");
-        if (pdfWindow) {
-          pdfWindow.opener = null;
-          pdfWindow.location.href = pdfUrl;
-        } else {
-          window.open(pdfUrl, "_blank", "noopener,noreferrer");
-        }
-      } else {
-        // 13. PDF absent → message propre + bouton WhatsApp (lead quand même enregistré)
-        setStatus("unavailable");
-      }
-      setFields({ fullName: "", phone: "", country: "" });
-    } catch {
-      pdfWindow?.close();
-      setStatus("error");
-      setErrorMsg(
-        "Une erreur est survenue lors de l'envoi. Merci de réessayer ou de nous contacter sur WhatsApp."
-      );
-    }
+    submitLeadInBackground({
+      fullName,
+      phone,
+      country: fields.country,
+      requestedDocument: true,
+      ...getUtmPayload(),
+    });
+    trackLead(undefined, undefined);
+    setFields({ fullName: "", phone: "", country: "" });
+    window.location.href = buildDirectWhatsAppLink(message);
   }
 
   const inputClasses =
@@ -291,12 +265,6 @@ export default function DossierModal({ pdfUrl, whatsappNumber }: DossierModalPro
                 )}
               </div>
             </div>
-
-            {status === "error" && errorMsg && (
-              <p className="mt-4 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-                {errorMsg}
-              </p>
-            )}
 
             <button
               type="submit"

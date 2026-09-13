@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import { ShieldCheck, Waves, LandPlot, BedDouble } from "lucide-react";
-import { buildWhatsAppLink, openDossierModal } from "@/lib/config";
+import {
+  buildDirectWhatsAppLink,
+  openDossierModal,
+  VISIT_WHATSAPP_MESSAGE,
+} from "@/lib/config";
 import { trackContact } from "@/lib/tracking";
 
 const REASSURANCE = [
@@ -25,7 +29,6 @@ export default function Hero({
   heroTitle,
   heroSubtitle,
   price,
-  whatsappNumber,
 }: HeroProps) {
   return (
     <section id="hero" className="relative min-h-[100svh] overflow-hidden">
@@ -80,10 +83,7 @@ export default function Hero({
               Recevoir le dossier complet
             </button>
             <a
-              href={buildWhatsAppLink(
-                whatsappNumber,
-                "Bonjour, je souhaite programmer une visite privée de Teranga Park Villas."
-              )}
+              href={buildDirectWhatsAppLink(VISIT_WHATSAPP_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackContact("hero_secondary_cta")}

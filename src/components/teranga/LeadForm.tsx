@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { buildDirectWhatsAppLink, submitLeadInBackground } from "@/lib/config";
 import { getUtmPayload, trackLead } from "@/lib/tracking";
 
 const COUNTRIES = [
@@ -111,22 +112,25 @@ export default function LeadForm() {
   const visitPreference = watch("visitPreference");
   const country = watch("country");
 
-  async function onSubmit(values: FormValues) {
+  function onSubmit(values: FormValues) {
     setStatus("sending");
     const utm = getUtmPayload();
-    try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, ...utm }),
-      });
-      if (!response.ok) throw new Error("Erreur serveur");
-      trackLead(values.budget, values.projectType);
-      setStatus("success");
-      reset();
-    } catch {
-      setStatus("error");
-    }
+    const message = [
+      "Bonjour, je souhaite recevoir le dossier Teranga Park Villas.",
+      `Nom : ${values.name.trim()}`,
+      `WhatsApp : ${values.phone.trim()}`,
+      `Pays : ${values.country}`,
+      `Projet : ${values.projectType}`,
+      `Budget : ${values.budget}`,
+      `Délai : ${values.purchaseTimeline}`,
+      `Financement : ${values.financing}`,
+    ].join("\n");
+
+    submitLeadInBackground({ ...values, ...utm });
+    trackLead(values.budget, values.projectType);
+    setStatus("success");
+    reset();
+    window.location.href = buildDirectWhatsAppLink(message);
   }
 
   return (
@@ -353,13 +357,6 @@ export default function LeadForm() {
                   )}
                 </div>
               </div>
-
-              {status === "error" && (
-                <p className="mt-5 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-                  Une erreur est survenue lors de l'envoi. Merci de réessayer
-                  ou de nous contacter directement sur WhatsApp.
-                </p>
-              )}
 
               <Button
                 type="submit"

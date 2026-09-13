@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { openDossierModal } from "@/lib/config";
+import { openDirectWhatsApp, VISIT_WHATSAPP_MESSAGE } from "@/lib/config";
 import { trackSchedule } from "@/lib/tracking";
 
 export default function VideoVisit() {
@@ -50,7 +50,7 @@ export default function VideoVisit() {
               type="button"
               onClick={() => {
                 trackSchedule("video_section_cta");
-                openDossierModal();
+                openDirectWhatsApp(VISIT_WHATSAPP_MESSAGE);
               }}
               className="mt-9 inline-flex min-h-[52px] items-center rounded-md bg-[#D6A84A] px-8 text-base font-semibold text-[#0B0B0B] transition-all hover:bg-[#e8c982] hover:shadow-[0_0_32px_rgba(214,168,74,0.4)]"
             >
@@ -107,7 +107,7 @@ export default function VideoVisit() {
             onClick={() => {
               setOpen(false);
               trackSchedule("video_dialog_cta");
-              openDossierModal();
+              openDirectWhatsApp(VISIT_WHATSAPP_MESSAGE);
             }}
             className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-md bg-[#D6A84A] text-base font-semibold text-[#0B0B0B] transition-colors hover:bg-[#e8c982]"
           >

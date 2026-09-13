@@ -1,7 +1,7 @@
 "use client";
 
 import { Globe2, Video } from "lucide-react";
-import { openDossierModal } from "@/lib/config";
+import { openDirectWhatsApp, VISIT_WHATSAPP_MESSAGE } from "@/lib/config";
 import { trackSchedule } from "@/lib/tracking";
 
 const COUNTRIES = [
@@ -63,7 +63,7 @@ export default function Diaspora() {
           type="button"
           onClick={() => {
             trackSchedule("diaspora_video_visit");
-            openDossierModal();
+            openDirectWhatsApp(VISIT_WHATSAPP_MESSAGE);
           }}
           className="mt-9 inline-flex min-h-[52px] items-center gap-2.5 rounded-md bg-[#D6A84A] px-8 text-base font-semibold text-[#0B0B0B] transition-all hover:bg-[#e8c982] hover:shadow-[0_0_32px_rgba(214,168,74,0.4)]"
         >
