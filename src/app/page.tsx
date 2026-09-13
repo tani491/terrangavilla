@@ -20,7 +20,7 @@ import TrackingInit from "@/components/teranga/TrackingInit";
 import { getSiteSettings } from "@/lib/site-settings";
 import { SITE } from "@/lib/config";
 
-// Revalidation ISR : site_settings est relu au maximum toutes les 60 secondes,
+// Revalidation ISR : site_setting est relu au maximum toutes les 60 secondes,
 // et React cache déduplique l'appel dans un même rendu (une seule requête Supabase).
 export const revalidate = 60;
 
@@ -30,7 +30,7 @@ export const revalidate = 60;
  * → PRIX → CONFIANCE → FORMULAIRE → WHATSAPP → VISITE → VENTE
  *
  * Les contenus modifiables (images, prix, WhatsApp, PDF, textes clés) proviennent
- * de la table Supabase `site_settings` via getSiteSettings() — avec valeurs par
+ * de la table Supabase `site_setting` via getSiteSettings() — avec valeurs par
  * défaut si Supabase n'est pas configuré ou indisponible.
  */
 export default async function Home() {

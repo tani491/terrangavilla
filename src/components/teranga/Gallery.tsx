@@ -21,7 +21,7 @@ interface GalleryProps {
 }
 
 /**
- * Galerie immersive — images dynamiques (site_settings.gallery_image_1..6).
+ * Galerie immersive — images dynamiques (site_setting.gallery_image_1..6).
  * Seules les images disponibles sont affichées (pas de bloc vide).
  * Mobile : slider horizontal — Desktop : grille. Lightbox simple au clic.
  */

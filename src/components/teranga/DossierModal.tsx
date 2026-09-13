@@ -107,6 +107,9 @@ export default function DossierModal({ pdfUrl, whatsappNumber }: DossierModalPro
       return;
     }
 
+    // Réserve l'onglet au clic utilisateur pour éviter le blocage mobile après l'appel réseau.
+    const pdfWindow = pdfUrl ? window.open("about:blank", "_blank") : null;
+
     setStatus("sending");
     setErrorMsg("");
 
@@ -131,13 +134,19 @@ export default function DossierModal({ pdfUrl, whatsappNumber }: DossierModalPro
       // 7. Téléchargement immédiat du dossier après enregistrement réussi
       if (pdfUrl) {
         setStatus("success");
-        window.open(pdfUrl, "_blank", "noopener,noreferrer");
+        if (pdfWindow) {
+          pdfWindow.opener = null;
+          pdfWindow.location.href = pdfUrl;
+        } else {
+          window.open(pdfUrl, "_blank", "noopener,noreferrer");
+        }
       } else {
         // 13. PDF absent → message propre + bouton WhatsApp (lead quand même enregistré)
         setStatus("unavailable");
       }
       setFields({ fullName: "", phone: "", country: "" });
     } catch {
+      pdfWindow?.close();
       setStatus("error");
       setErrorMsg(
         "Une erreur est survenue lors de l'envoi. Merci de réessayer ou de nous contacter sur WhatsApp."
@@ -301,7 +310,7 @@ export default function DossierModal({ pdfUrl, whatsappNumber }: DossierModalPro
                 </>
               ) : (
                 <>
-                  <Send className="h-4.5 w-4.5" aria-hidden />
+                  <Send className="h-[18px] w-[18px]" aria-hidden />
                   Recevoir le dossier
                 </>
               )}

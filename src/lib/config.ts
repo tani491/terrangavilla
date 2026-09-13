@@ -2,7 +2,7 @@
  * Configuration centrale Teranga Park Villas.
  *
  * ⚠️ Les valeurs modifiables sans toucher au code (WhatsApp, prix, images, PDF)
- * vivent désormais dans la table Supabase `site_settings` — voir src/lib/site-settings.ts.
+ * vivent désormais dans la table Supabase `site_setting` — voir src/lib/site-settings.ts.
  * Les constantes ci-dessous servent de valeurs par défaut (fallback).
  *
  * IDs Pixel / GA4 se règlent via .env :
@@ -35,7 +35,7 @@ export const DOSSIER_WHATSAPP_MESSAGE =
 
 /**
  * Helper unique pour construire un lien WhatsApp.
- * Le numéro vient de site_settings (Supabase) et est passé en prop depuis page.tsx.
+ * Le numéro vient de site_setting (Supabase) et est passé en prop depuis page.tsx.
  * Fallback sur SITE.whatsappNumber si absent.
  */
 export function buildWhatsAppLink(

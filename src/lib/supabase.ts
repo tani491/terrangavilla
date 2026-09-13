@@ -2,7 +2,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Client Supabase — créé uniquement si les variables d'environnement sont présentes.
- * - Côté serveur : lecture de site_settings, insertion des leads (via RLS anon).
+ * - Côté serveur : lecture de site_setting, insertion des leads (via RLS anon).
  * - Côté client : insertion des leads uniquement.
  * - Ne JAMAIS utiliser SUPABASE_SERVICE_ROLE_KEY ici (jamais côté frontend).
  */

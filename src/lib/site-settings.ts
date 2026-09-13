@@ -6,7 +6,7 @@ import { getSupabaseClient, isSupabaseConfigured } from "./supabase";
  *
  * Fonctionnement :
  * 1. Valeurs par défaut = contenu actuel du site (le site ne casse jamais).
- * 2. Si Supabase est configuré, on lit la 1ère ligne de `site_settings`
+ * 2. Si Supabase est configuré, on lit la 1ère ligne de `site_setting`
  *    et on applique uniquement les valeurs non vides (merge).
  * 3. Si Supabase est absent, lent (>3s) ou en erreur → on retourne les défauts.
  *
@@ -109,7 +109,7 @@ async function fetchFromSupabase(): Promise<Partial<SiteSettings> | null> {
 
   try {
     const result = await withTimeout(
-      supabase.from("site_settings").select("*").limit(1).maybeSingle(),
+      supabase.from("site_setting").select("*").limit(1).maybeSingle(),
       3000
     );
     if (!result || result.error || !result.data) return null;

@@ -12,7 +12,7 @@ interface WhatsAppButtonProps {
 
 /**
  * Bouton WhatsApp flottant — discret et premium.
- * Numéro dynamique (site_settings.whatsapp_number) passé en prop depuis page.tsx.
+ * Numéro dynamique (site_setting.whatsapp_number) passé en prop depuis page.tsx.
  * Apparaît après un léger scroll pour ne pas polluer le Hero.
  * Un seul bouton flottant sur toute la page, conforme au brief.
  */

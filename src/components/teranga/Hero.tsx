@@ -29,7 +29,7 @@ export default function Hero({
 }: HeroProps) {
   return (
     <section id="hero" className="relative min-h-[100svh] overflow-hidden">
-      {/* Image de fond (dynamique — site_settings.hero_image_url) */}
+      {/* Image de fond (dynamique — site_setting.hero_image_url) */}
       <div className="absolute inset-0">
         <Image
           src={heroImageUrl}
@@ -62,7 +62,7 @@ export default function Hero({
             {heroSubtitle}
           </p>
 
-          {/* Prix — visible immédiatement (dynamique — site_settings.price) */}
+          {/* Prix — visible immédiatement (dynamique — site_setting.price) */}
           <p className="mt-6 text-lg font-semibold text-[#F5F5F5] sm:text-xl">
             À partir de{" "}
             <span className="text-gold-gradient font-display text-3xl font-bold sm:text-4xl">

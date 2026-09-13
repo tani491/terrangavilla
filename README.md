@@ -162,9 +162,7 @@ Autre port : `PORT=3001 npm start`
 2. [vercel.com](https://vercel.com) → **Add New → Project** → importez le dépôt
    (le build Next.js est détecté automatiquement, aucune option à changer).
 3. **Environment Variables** → ajoutez :
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `NEXT_PUBLIC_META_PIXEL_ID` et/ou `NEXT_PUBLIC_GA4_ID` si utilisés
+   - `3n  si utilisés
 4. **Deploy**. Les mises à jour de contenu se font ensuite depuis Supabase
    (`site_settings`), sans redéploiement.
 
@@ -259,5 +257,6 @@ pendant l'installation.
 | La modale dit « dossier indisponible » | `pdf_url` est vide dans `site_settings` (ou Storage non public) |
 | Le site ignore Supabase | Vérifiez `.env.local` (URL + anon key) et redémarrez le serveur |
 | `npx` propose d'installer `prisma@8…` | Répondez **n** — utilisez toujours la version locale : `npx --no-install prisma generate` |
-#   t e r r a n g a v i l l a  
+#   t e r r a n g a v i l l a 
+ 
  
