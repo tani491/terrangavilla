@@ -31,6 +31,8 @@ export const SITE = {
     "https://www.tiktok.com/@ikhlass.construction",
 };
 
+export const SITE_URL = "https://www.terangavillas.online";
+
 /** Messages WhatsApp préremplis (une seule source). */
 export const DEFAULT_WHATSAPP_MESSAGE =
   VISIT_WHATSAPP_MESSAGE;

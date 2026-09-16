@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { SITE_URL } from "@/lib/config";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -33,12 +34,15 @@ export const metadata: Metadata = {
     "investissement immobilier Sénégal",
     "diaspora",
   ],
-  metadataBase: new URL("https://terangaparkvillas.com"),
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Teranga Park Villas | Villas haut de gamme sur la Petite Côte",
     description:
       "Découvrez Teranga Park Villas, un projet immobilier haut de gamme situé à Nguerigne Peulh, à proximité de Ngaparou sur la Petite Côte du Sénégal.",
-    url: "https://terangaparkvillas.com",
+    url: SITE_URL,
     siteName: "Teranga Park Villas",
     type: "website",
     locale: "fr_SN",
