@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { GoogleTranslateProvider } from "@/components/teranga/LanguageSwitcher";
 import { SITE_URL } from "@/lib/config";
 
 const cormorant = Cormorant_Garamond({
@@ -85,6 +86,7 @@ export default function RootLayout({
         className={`${cormorant.variable} ${manrope.variable} antialiased bg-background text-foreground font-sans`}
       >
         {children}
+        <GoogleTranslateProvider />
         <Toaster />
 
         {/* Meta Pixel — activé dès le départ pour le retargeting */}

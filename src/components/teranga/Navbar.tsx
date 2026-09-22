@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS, openDossierModal } from "@/lib/config";
+import LanguageSwitcher from "@/components/teranga/LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
 export default function Navbar() {
@@ -66,6 +67,7 @@ export default function Navbar() {
           >
             Recevoir le dossier
           </button>
+          <LanguageSwitcher />
         </div>
 
         {/* Burger mobile */}
@@ -94,6 +96,7 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <LanguageSwitcher variant="mobile" />
             <button
               type="button"
               onClick={() => {
