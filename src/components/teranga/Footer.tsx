@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Instagram, MessageCircle, Music2, Phone } from "lucide-react";
+import { ExternalLink, Instagram, MessageCircle, Music2, Phone } from "lucide-react";
 import { buildWhatsAppLink, DEFAULT_WHATSAPP_MESSAGE, SITE } from "@/lib/config";
 import { trackContact } from "@/lib/tracking";
 
@@ -13,9 +13,9 @@ export default function Footer({ whatsappNumber }: FooterProps) {
   return (
     <footer className="mt-auto border-t border-[rgba(214,168,74,0.16)] bg-[#080808]">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-        <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-[1.15fr_0.9fr_1fr_0.85fr]">
           {/* Marque */}
-          <div className="max-w-sm text-center md:text-left">
+          <div className="text-center md:text-left">
             <p className="font-display text-2xl font-semibold text-[#F5F5F5]">
               Teranga Park <span className="text-gold-gradient">Villas</span>
             </p>
@@ -23,6 +23,21 @@ export default function Footer({ whatsappNumber }: FooterProps) {
               Projet immobilier sur la Petite Côte.
               <br />
               Nguerigne Peulh — route de Ngaparou, Sénégal.
+            </p>
+            <p className="mt-5 rounded-lg border border-[rgba(214,168,74,0.22)] bg-[rgba(214,168,74,0.06)] p-4 text-sm leading-relaxed text-[#F5F5F5]">
+              Votre interlocuteur commercial :{" "}
+              <a
+                href={SITE.sunuLogisUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#D6A84A] underline-offset-4 hover:underline"
+              >
+                SunuLogis
+              </a>{" "}
+              <span className="text-[#A7A7A7]">
+                (Apporteur d&apos;affaires & Conseil en investissement
+                immobilier)
+              </span>
             </p>
           </div>
 
@@ -48,6 +63,22 @@ export default function Footer({ whatsappNumber }: FooterProps) {
               <Phone className="h-4.5 w-4.5 shrink-0 text-[#D6A84A]" aria-hidden />
               {SITE.phoneDisplay}
             </a>
+          </div>
+
+          {/* Commercialisation */}
+          <div className="flex flex-col items-center gap-3 md:items-start">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#D6A84A]">
+              Commercialisation
+            </p>
+            <a
+              href={SITE.sunuLogisUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-[44px] items-center gap-2.5 text-sm text-[#A7A7A7] transition-colors hover:text-[#D6A84A]"
+            >
+              <ExternalLink className="h-4.5 w-4.5 shrink-0 text-[#D6A84A]" aria-hidden />
+              SunuLogis
+            </a>
             <a
               href={SITE.instagramUrl}
               target="_blank"
@@ -55,7 +86,7 @@ export default function Footer({ whatsappNumber }: FooterProps) {
               className="flex min-h-[44px] items-center gap-2.5 text-sm text-[#A7A7A7] transition-colors hover:text-[#D6A84A]"
             >
               <Instagram className="h-4.5 w-4.5 shrink-0 text-[#D6A84A]" aria-hidden />
-              Ikhlass Construction · my_immobilier_senegal
+              Instagram · @sunulogis
             </a>
             <a
               href={SITE.tiktokUrl}
@@ -64,7 +95,7 @@ export default function Footer({ whatsappNumber }: FooterProps) {
               className="flex min-h-[44px] items-center gap-2.5 text-sm text-[#A7A7A7] transition-colors hover:text-[#D6A84A]"
             >
               <Music2 className="h-4.5 w-4.5 shrink-0 text-[#D6A84A]" aria-hidden />
-              TikTok · @ikhlass.construction
+              TikTok · @sunulogis8
             </a>
           </div>
 

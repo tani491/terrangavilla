@@ -8,8 +8,12 @@ const PROXIMITIES = [
   { icon: Waves, label: "À proximité de la lagune" },
 ];
 
+const MAP_LATITUDE = "14.4777";
+const MAP_LONGITUDE = "-17.03697";
 const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=Nguerigne+Peulh+Ngaparou+S%C3%A9n%C3%A9gal";
+  `https://www.google.com/maps/search/?api=1&query=${MAP_LATITUDE}%2C${MAP_LONGITUDE}`;
+const MAP_EMBED_URL =
+  `https://www.google.com/maps?q=${MAP_LATITUDE},${MAP_LONGITUDE}&z=16&output=embed`;
 
 export default function Location() {
   return (
@@ -53,31 +57,15 @@ export default function Location() {
             </a>
           </div>
 
-          {/* Carte — intégration Google Maps à connecter avec l'iframe officielle */}
-          <div className="card-luxury relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-lg sm:min-h-[400px]">
-            <div
-              className="absolute inset-0 opacity-25"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(214,168,74,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(214,168,74,0.18) 1px, transparent 1px)",
-                backgroundSize: "44px 44px",
-              }}
-              aria-hidden
+          <div className="card-luxury relative min-h-[320px] overflow-hidden rounded-lg sm:min-h-[400px]">
+            <iframe
+              title="Localisation Teranga Park Villas à Nguerigne Peulh, route de Ngaparou"
+              src={MAP_EMBED_URL}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 h-full w-full border-0"
             />
-            <div className="relative z-10 px-8 text-center">
-              <div className="mx-auto mb-5 inline-flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(214,168,74,0.4)] bg-[rgba(214,168,74,0.08)]">
-                <MapPin className="h-7 w-7 text-[#D6A84A]" aria-hidden />
-              </div>
-              <p className="font-display text-2xl font-semibold text-[#F5F5F5]">
-                Nguerigne Peulh
-              </p>
-              <p className="mt-2 text-sm text-[#A7A7A7]">
-                Route de Ngaparou — Petite Côte, Sénégal
-              </p>
-              <p className="mt-4 text-xs text-[#A7A7A7]/70">
-                Carte interactive Google Maps à intégrer à cette emplacement.
-              </p>
-            </div>
           </div>
         </div>
       </div>

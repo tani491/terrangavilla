@@ -141,11 +141,11 @@ export default function DossierModal({ pdfUrl }: DossierModalProps) {
       <DialogContent className="max-w-md border-[rgba(214,168,74,0.25)] bg-[#0B0B0B] p-5 sm:p-7">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl font-semibold text-[#F5F5F5]">
-            Recevoir le dossier
+            Recevoir le dossier du projet
           </DialogTitle>
           <DialogDescription className="pt-1.5 text-sm leading-relaxed text-[#A7A7A7]">
-            Laissez vos coordonnées et téléchargez immédiatement le dossier
-            complet de Teranga Park Villas.
+            Parcours rapide : nom, téléphone WhatsApp et pays suffisent pour
+            demander le dossier complet de Teranga Park Villas.
           </DialogDescription>
         </DialogHeader>
 

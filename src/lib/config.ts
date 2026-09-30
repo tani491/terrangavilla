@@ -23,12 +23,14 @@ export const SITE = {
   whatsappNumber: DIRECT_WHATSAPP_NUMBER, // +221 77 361 59 44
   phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? "+221 77 361 59 44",
   phoneHref: "tel:" + (process.env.NEXT_PUBLIC_PHONE_HREF ?? "+221773615944"),
+  sunuLogisUrl:
+    process.env.NEXT_PUBLIC_SUNULOGIS_URL ?? "https://www.sunulogis.com/",
   instagramUrl:
     process.env.NEXT_PUBLIC_INSTAGRAM_URL ??
-    "https://www.instagram.com/my_immobilier_senegal/",
+    "https://www.instagram.com/sunulogis/?hl=fr",
   tiktokUrl:
     process.env.NEXT_PUBLIC_TIKTOK_URL ??
-    "https://www.tiktok.com/@ikhlass.construction",
+    "https://www.tiktok.com/@sunulogis8",
 };
 
 export const SITE_URL = "https://www.terangavillas.online";

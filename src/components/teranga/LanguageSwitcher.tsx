@@ -41,7 +41,8 @@ declare global {
   }
 }
 
-const SOURCE_LANGUAGE: LanguageCode = "fr";
+const defaultLanguage: LanguageCode = "fr";
+const SOURCE_LANGUAGE: LanguageCode = defaultLanguage;
 const STORAGE_KEY = "teranga-preferred-language";
 const LANGUAGE_EVENT = "teranga-language-change";
 const TRANSLATE_READY_EVENT = "teranga-google-translate-ready";
@@ -104,6 +105,12 @@ function readGoogleTranslateLanguage(): LanguageCode | null {
     return null;
   }
 
+  const comboLanguage = document.querySelector<HTMLSelectElement>(".goog-te-combo")
+    ?.value;
+  if (isLanguageCode(comboLanguage)) {
+    return comboLanguage;
+  }
+
   const cookieLanguage = document.cookie
     .split(";")
     .map((part) => part.trim())
@@ -124,9 +131,9 @@ function readGoogleTranslateLanguage(): LanguageCode | null {
   return isLanguageCode(htmlLanguage) ? htmlLanguage : null;
 }
 
-function readStoredLanguage(): LanguageCode {
+function readStoredLanguage(): LanguageCode | null {
   if (typeof window === "undefined") {
-    return SOURCE_LANGUAGE;
+    return null;
   }
 
   try {
@@ -138,7 +145,11 @@ function readStoredLanguage(): LanguageCode {
     // localStorage can be unavailable in strict privacy contexts.
   }
 
-  return readGoogleTranslateLanguage() ?? SOURCE_LANGUAGE;
+  return null;
+}
+
+function readPreferredLanguage(): LanguageCode {
+  return readStoredLanguage() ?? defaultLanguage;
 }
 
 function writeStoredLanguage(language: LanguageCode) {
@@ -213,7 +224,7 @@ function applyLanguage(language: LanguageCode, persist = true) {
 
 export function GoogleTranslateProvider() {
   useEffect(() => {
-    const initialLanguage = readStoredLanguage();
+    const initialLanguage = readPreferredLanguage();
     applyLanguage(initialLanguage, false);
 
     window.googleTranslateElementInit = () => {
@@ -237,7 +248,7 @@ export function GoogleTranslateProvider() {
       }
 
       window.dispatchEvent(new Event(TRANSLATE_READY_EVENT));
-      triggerGoogleTranslate(readStoredLanguage());
+      triggerGoogleTranslate(readPreferredLanguage());
     };
 
     if (window.google?.translate?.TranslateElement) {
@@ -274,12 +285,12 @@ export default function LanguageSwitcher({
   className,
 }: LanguageSwitcherProps) {
   const [currentLanguage, setCurrentLanguage] =
-    useState<LanguageCode>(SOURCE_LANGUAGE);
+    useState<LanguageCode>(defaultLanguage);
 
   useEffect(() => {
-    const storedLanguage = readStoredLanguage();
-    setCurrentLanguage(storedLanguage);
-    applyLanguage(storedLanguage, false);
+    const preferredLanguage = readPreferredLanguage();
+    setCurrentLanguage(preferredLanguage);
+    applyLanguage(preferredLanguage, false);
 
     const syncLanguage = (language: LanguageCode) => {
       setCurrentLanguage(language);
@@ -300,16 +311,41 @@ export default function LanguageSwitcher({
       }
     };
 
-    const onTranslateReady = () => triggerGoogleTranslate(readStoredLanguage());
+    const onTranslateReady = () => {
+      const preferred = readPreferredLanguage();
+      setCurrentLanguage(preferred);
+      triggerGoogleTranslate(preferred);
+    };
+
+    const onGoogleTranslateChange = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (!target?.matches(".goog-te-combo")) {
+        return;
+      }
+
+      const storedLanguage = readStoredLanguage();
+      const displayedLanguage = readGoogleTranslateLanguage();
+      const nextLanguage = storedLanguage ?? defaultLanguage;
+
+      setCurrentLanguage((language) =>
+        language === nextLanguage ? language : nextLanguage
+      );
+
+      if (!storedLanguage && displayedLanguage !== defaultLanguage) {
+        applyLanguage(defaultLanguage, false);
+      }
+    };
 
     window.addEventListener(LANGUAGE_EVENT, onLanguageChange);
     window.addEventListener("storage", onStorage);
     window.addEventListener(TRANSLATE_READY_EVENT, onTranslateReady);
+    document.addEventListener("change", onGoogleTranslateChange);
 
     return () => {
       window.removeEventListener(LANGUAGE_EVENT, onLanguageChange);
       window.removeEventListener("storage", onStorage);
       window.removeEventListener(TRANSLATE_READY_EVENT, onTranslateReady);
+      document.removeEventListener("change", onGoogleTranslateChange);
     };
   }, []);
 

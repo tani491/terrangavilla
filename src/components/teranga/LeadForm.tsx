@@ -62,7 +62,6 @@ const formSchema = z.object({
       "Visite physique",
       "Visite vidéo",
       "Appel WhatsApp",
-      "Recevoir uniquement le dossier",
     ],
     { message: "Veuillez sélectionner votre préférence." }
   ),
@@ -116,7 +115,7 @@ export default function LeadForm() {
     setStatus("sending");
     const utm = getUtmPayload();
     const message = [
-      "Bonjour, je souhaite recevoir le dossier Teranga Park Villas.",
+      "Bonjour, je souhaite être accompagné dans mon projet Teranga Park Villas.",
       `Nom : ${values.name.trim()}`,
       `WhatsApp : ${values.phone.trim()}`,
       `Pays : ${values.country}`,
@@ -124,6 +123,7 @@ export default function LeadForm() {
       `Budget : ${values.budget}`,
       `Délai : ${values.purchaseTimeline}`,
       `Financement : ${values.financing}`,
+      `Préférence : ${values.visitPreference}`,
     ].join("\n");
 
     submitLeadInBackground({ ...values, ...utm });
@@ -138,15 +138,15 @@ export default function LeadForm() {
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-10 text-center sm:mb-12">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#D6A84A]">
-            Votre projet
+            Accompagnement personnalisé
           </p>
           <h2 className="font-display text-3xl font-semibold leading-tight text-[#F5F5F5] sm:text-4xl lg:text-5xl">
-            Recevez le dossier complet
+            Être accompagné dans mon projet
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#A7A7A7] sm:text-lg">
-            Quelques informations nous permettent de vous transmettre les
-            détails du projet, les disponibilités et les modalités adaptées à
-            votre situation.
+            Ce formulaire détaillé est réservé aux demandes d&apos;audit et de
+            conseil : budget, financement, délai d&apos;achat et préférence de
+            contact.
           </p>
           <div className="hairline-gold mx-auto mt-8 w-40" aria-hidden />
         </div>
@@ -159,8 +159,8 @@ export default function LeadForm() {
                 Merci.
               </h3>
               <p className="mt-3 max-w-md text-base leading-relaxed text-[#A7A7A7]">
-                Votre demande a bien été prise en compte. Nous vous
-                contacterons prochainement.
+                Votre demande d&apos;accompagnement a bien été prise en compte.
+                Nous vous contacterons prochainement.
               </p>
             </div>
           ) : (
@@ -329,7 +329,7 @@ export default function LeadForm() {
 
                 {/* Préférence */}
                 <div className="sm:col-span-2">
-                  <FieldLabel>Votre préférence *</FieldLabel>
+                  <FieldLabel>Accompagnement souhaité *</FieldLabel>
                   <Select
                     value={visitPreference || undefined}
                     onValueChange={(v) => setValue("visitPreference", v as FormValues["visitPreference"], { shouldValidate: true })}
@@ -342,7 +342,6 @@ export default function LeadForm() {
                         "Visite physique",
                         "Visite vidéo",
                         "Appel WhatsApp",
-                        "Recevoir uniquement le dossier",
                       ].map((o) => (
                         <SelectItem key={o} value={o} className="focus:bg-[rgba(214,168,74,0.12)] focus:text-[#D6A84A]">
                           {o}
@@ -371,7 +370,7 @@ export default function LeadForm() {
                 ) : (
                   <>
                     <Send className="mr-2 h-4.5 w-4.5" aria-hidden />
-                    Recevoir le dossier Teranga Park Villas
+                    Demander mon audit d&apos;investissement
                   </>
                 )}
               </Button>
