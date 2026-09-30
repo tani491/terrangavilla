@@ -105,8 +105,8 @@ function readGoogleTranslateLanguage(): LanguageCode | null {
     return null;
   }
 
-  const comboLanguage = document.querySelector<HTMLSelectElement>(".goog-te-combo")
-    ?.value;
+  const comboLanguage =
+    document.querySelector<HTMLSelectElement>(".goog-te-combo")?.value ?? null;
   if (isLanguageCode(comboLanguage)) {
     return comboLanguage;
   }
